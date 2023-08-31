@@ -90,17 +90,19 @@ enum AttachmentType {
 
 model Donor {
   id                   Int               @id @default(autoincrement())
-  name                 String
-  email                String            @unique
-  father_name          String
-  phone_number         String
+  name                 String?
+  email                String?            @unique
+  father_name          String?
+  phone_number         String            @unique
   password             String
-  otp                  Int
-  country              String
-  district             String
-  state                String
-  pincode              Int
-  is_active            Boolean
+  otp                  Int?
+  is_otp_verified      Boolean           @default(false)
+  country              String?
+  district             String?
+  state                String?
+  pincode              Int?
+  language             Language?          @default(english)
+  is_active            Boolean?           @default(true)
   area_rep_ref         Donor?            @relation("area_rep", fields: [area_rep_id], references: [id], onDelete: SetNull)
   area_rep_id          Int?
   area_rep             Donor[]           @relation("area_rep")
@@ -115,8 +117,14 @@ model Donor {
   donor_groups      DonorGroup[]
 }
 
+enum Language {
+  tamil
+  english
+}
+
 model SubscriptionPlan {
   id             Int      @id @default(autoincrement())
+  plan_name      String
   payment_cycle  Int
   payment_amount Int
   is_active      Boolean
@@ -138,6 +146,7 @@ model DonorGroup {
   donor_id     Int
   name         String
   phone_number String
+  is_verified  Boolean  @default(false)
   created_at   DateTime @default(now())
   modified_at  DateTime @updatedAt
 }
