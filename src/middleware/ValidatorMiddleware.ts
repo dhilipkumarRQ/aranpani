@@ -11,7 +11,7 @@ export default (validator: any) => {
         }catch(err:any){
             if(err.isJoi) 
                 return next(createHttpError(422, {message: err.message}))
-            next(createHttpError(500))
+            return next(createHttpError(500))
         }
     }
 }

@@ -10,6 +10,9 @@
     "test": "NODE_ENV='test' ENV_FILE=./.test.env jest --coverage --collectCoverageFrom='./src/**'",
     "prisma:schema-generate": "*.*.prisma >> shcema.prisma"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -35,6 +38,7 @@
     "i": "^0.3.7",
     "joi": "^17.10.0",
     "jsonwebtoken": "^9.0.1",
+    "morgan": "^1.10.0",
     "npm": "^9.8.1",
     "prisma": "^5.2.0"
   }

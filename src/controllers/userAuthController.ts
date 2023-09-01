@@ -5,7 +5,7 @@ import createHttpError from "http-errors";
 import { OTP } from "../config";
 import {generateToken}  from "../utils/jwt_token";
 import { Roles } from "../config";
-
+import { Prisma } from '@prisma/client';
 
 const login = async (req: Request, res: Response, next:NextFunction) => {
     const {phone_number, password, email, role} = req.body
@@ -72,14 +72,18 @@ const signup = async (req: Request, res: Response, next:NextFunction) => {
         return next(createHttpError.Conflict('donor with this phone number is already present'))
     }
     const hash = await generateHashPass(req)
-    const donor = await prisma.donor.create({
-        data: {
-            phone_number: req.body.phone_number,
-            password: hash,
-            otp: OTP
-        }
-    })
-    res.json(donor) 
+    try {
+        const donor = await prisma.donor.create({
+            data: {
+                phone_number: req.body.phone_number,
+                password: hash,
+                otp: OTP
+            }
+        }) 
+        res.json(donor) 
+    } catch (error:any) {
+        next(error)
+    }
 }
 
 const verify_otp = async (req: Request, res: Response, next:NextFunction) => {

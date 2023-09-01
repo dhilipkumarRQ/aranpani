@@ -1,14 +1,16 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import dotenv from 'dotenv';
-// import prisma from './helper_files/prisma_init';
+const morgan = require('morgan');
 import createHttpError from 'http-errors';
 import routes from './routes/index'
 
 dotenv.config()
 
 const app: Express = express()
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
+app.use(morgan('dev'));
 
 app.use('/api/v1', routes)
 

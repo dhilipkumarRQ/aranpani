@@ -1,4 +1,4 @@
-import donorAuthController from './DonorAuthController'
+import userAuthController from './userAuthController'
 
 
-export default {donorAuthController}
+export default {userAuthController}

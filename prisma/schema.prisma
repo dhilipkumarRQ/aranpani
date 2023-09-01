@@ -101,8 +101,10 @@ model Donor {
   district             String?
   state                String?
   pincode              Int?
+  address              String?
   language             Language?          @default(english)
   is_active            Boolean?           @default(true)
+  is_area_rep          Boolean            @default(false)
   area_rep_ref         Donor?            @relation("area_rep", fields: [area_rep_id], references: [id], onDelete: SetNull)
   area_rep_id          Int?
   area_rep             Donor[]           @relation("area_rep")
