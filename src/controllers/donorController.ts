@@ -121,7 +121,7 @@ const completeDonorProfile = async (req:Request, res:Response, next:NextFunction
                 res.json(donor)
             }else{
                 //redirect to otp page
-                res.send({'message': 'please verifiy otp, redirecting to opt page'})
+                res.send({'message': 'please verifiy otp, redirecting to otp page'})
             }
                  
         }else{

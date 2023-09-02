@@ -144,12 +144,14 @@ model DonorDeactivate {
 
 model DonorGroup {
   id           Int      @id @default(autoincrement())
-  Donor        Donor    @relation(fields: [donor_id], references: [id])
+  donor        Donor    @relation(fields: [donor_id], references: [id])
   donor_id     Int
   name         String
   phone_number String
+  otp           Int  @default(1111)
   is_verified  Boolean  @default(false)
   created_at   DateTime @default(now())
+  deleted_at   DateTime?
   modified_at  DateTime @updatedAt
 }
 

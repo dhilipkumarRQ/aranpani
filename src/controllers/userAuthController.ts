@@ -40,6 +40,9 @@ const login = async (req: Request, res: Response, next:NextFunction) => {
         if(!user) {
             return next(createHttpError.Conflict('donor account not present'))
         }
+        if(!user.is_otp_verified) {
+            return next(createHttpError.Forbidden('please verify otp'))
+        } 
         const isMatch:boolean = await comparePassword(password, user.password)
         if(isMatch) {
             var token
