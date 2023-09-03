@@ -34,11 +34,11 @@ model Project {
   temple_incharge_name String
   contact              String
   location             String
-  status               ProjectStatus @default(proposed)
-  start_date           DateTime?
-  end_date             DateTime?
-  estimate_amount      Int
-  expensed_amount      Int
+  status               ProjectStatus  @default(proposed)
+  start_date           DateTime? @db.Date
+  end_date             DateTime? @db.Date
+  estimate_amount      Int @default(0) 
+  expensed_amount      Int @default(0) 
   deleted_at           DateTime?
   created_at           DateTime      @default(now())
   modified_at          DateTime      @updatedAt

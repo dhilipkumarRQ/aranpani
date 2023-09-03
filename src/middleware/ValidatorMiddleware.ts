@@ -1,6 +1,5 @@
 import Joi from "joi";
 import createHttpError from "http-errors";
-import validators from "../validators/index";
 import { Request, Response, NextFunction } from "express";
 
 export default (validator: any) => {
