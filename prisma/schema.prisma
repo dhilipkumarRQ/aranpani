@@ -46,7 +46,6 @@ model Project {
   project_activity ProjectActivity[]
 
   donors Donor[]
-
   attachments Attachment[] @relation("project_attachment")
 }
 
