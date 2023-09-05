@@ -34,18 +34,18 @@ model Project {
   temple_incharge_name String
   contact              String
   location             String
-  status               ProjectStatus  @default(proposed)
-  start_date           DateTime? @db.Date
-  end_date             DateTime? @db.Date
-  estimate_amount      Int @default(0) 
-  expensed_amount      Int @default(0) 
+  status               ProjectStatus @default(proposed)
+  start_date           DateTime?     @db.Date
+  end_date             DateTime?     @db.Date
+  estimate_amount      Int           @default(0)
+  expensed_amount      Int           @default(0)
   deleted_at           DateTime?
   created_at           DateTime      @default(now())
   modified_at          DateTime      @updatedAt
 
   project_activity ProjectActivity[]
 
-  donors Donor[]
+  donors      Donor[]
   attachments Attachment[] @relation("project_attachment")
 }
 
@@ -90,7 +90,7 @@ enum AttachmentType {
 model Donor {
   id                   Int               @id @default(autoincrement())
   name                 String?
-  email                String?            @unique
+  email                String?           @unique
   father_name          String?
   phone_number         String            @unique
   password             String
@@ -101,9 +101,9 @@ model Donor {
   state                String?
   pincode              Int?
   address              String?
-  language             Language?          @default(english)
-  is_active            Boolean?           @default(true)
-  is_area_rep          Boolean            @default(false)
+  language             Language?         @default(english)
+  is_active            Boolean?          @default(true)
+  is_area_rep          Boolean           @default(false)
   area_rep_ref         Donor?            @relation("area_rep", fields: [area_rep_id], references: [id], onDelete: SetNull)
   area_rep_id          Int?
   area_rep             Donor[]           @relation("area_rep")
@@ -116,6 +116,7 @@ model Donor {
   projects          Project[]
   donor_deactivates DonorDeactivate[]
   donor_groups      DonorGroup[]
+  payments          Payment[]
 }
 
 enum Language {
@@ -142,24 +143,25 @@ model DonorDeactivate {
 }
 
 model DonorGroup {
-  id           Int      @id @default(autoincrement())
-  donor        Donor    @relation(fields: [donor_id], references: [id])
+  id           Int       @id @default(autoincrement())
+  donor        Donor     @relation(fields: [donor_id], references: [id])
   donor_id     Int
   name         String
   phone_number String
-  otp           Int  @default(1111)
-  is_verified  Boolean  @default(false)
-  created_at   DateTime @default(now())
+  otp          Int       @default(1111)
+  is_verified  Boolean   @default(false)
+  created_at   DateTime  @default(now())
   deleted_at   DateTime?
-  modified_at  DateTime @updatedAt
+  modified_at  DateTime  @updatedAt
 }
 
 enum payment_mode {
-  gpay
-  paytm
+  gpay   
+  paytm  
   phonepe
   amazonpay
   offline
+  stripe 
 }
 
 enum transaction_status {
@@ -179,12 +181,17 @@ model PaymentStatus {
 
 model Payment {
   id                 Int           @id @default(autoincrement())
-  payment_mode       payment_mode
+  payment_mode       payment_mode?
   payment_status_ref PaymentStatus @relation(fields: [payment_status_id], references: [id])
   payment_status_id  Int
+  amount             Int
   created_at         DateTime      @default(now())
+  modified_at        DateTime      @updatedAt
+  payment_session_id String?
   transaction_ref    Transaction?  @relation(fields: [transaction_id], references: [id])
-  transaction_id     Int
+  transaction_id     Int?
+  donor              Donor         @relation(fields: [donor_id], references: [id])
+  donor_id           Int
 }
 
 model Transaction {

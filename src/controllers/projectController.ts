@@ -111,7 +111,18 @@ const deleteProject:RequestHandler = async(req,res,next) => {
         next(error)
     }
 }
-const getAllSubscriber:RequestHandler = async(req,res,next) => {}
+const getAllSubscriber:RequestHandler = async(req,res,next) => {
+    try{
+        const {project_id} = req.params
+        const subcribers = await prisma.project.findUnique({
+            where:{id: Number(project_id)}, 
+            select: {donors: {select: {id:true, name:true, phone_number:true}}}
+        })
+        res.send(subcribers)
+    }catch(error){
+        next(error)
+    }
+}
 
 
 const isValidStateChange = async (nextstate:string,id:string):Promise<boolean> => {
@@ -146,7 +157,30 @@ const restoreProject:RequestHandler = async(req,res,next) => {
     }
 }
 
-export default {addProject, updateProject, getAllProject, getProject, changeProjectState, deleteProject, getAllSubscriber,restoreProject}
+const addActivity:RequestHandler = async(req,res,next) => {
+    try {
+        const {project_id} = req.params
+        const activity = await prisma.projectActivity.create({data: {...req.body, project_id: Number(project_id)}}) 
+        res.send(activity)
+    } catch (error) {
+        next(error)
+    }
+}
+const getAllActivity:RequestHandler = async (req,res,next) => {
+    try {
+        const {project_id} = req.params
+        const activity = await prisma.projectActivity.findMany({where:{project_id: Number(project_id)}})
+        res.send(activity)
+    } catch (error) {
+        next(error)
+    }
+}
+const editActivity:RequestHandler = (req,res,next) => {
+    res.send("to be implemented...")
+}
+
+
+export default {addProject, updateProject, getAllProject, getProject, changeProjectState, deleteProject, getAllSubscriber,restoreProject, addActivity, getAllActivity, editActivity}
 
 
 

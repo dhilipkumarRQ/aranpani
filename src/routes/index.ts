@@ -5,6 +5,7 @@ import adminRoute from './adminRoutes'
 import groupRoute from './groupRoutes'
 import projectRoute from './projectRoutes'
 import subscriptionRoute from './subscriptionRoutes'
+import paymentRoute from './paymentRoutes'
 
 
 
@@ -16,6 +17,7 @@ router.use('/admin', adminRoute)
 router.use('/group', groupRoute)
 router.use('/project', projectRoute)
 router.use('/subscription', subscriptionRoute)
+router.use('/payment', paymentRoute)
 
 
 export default router

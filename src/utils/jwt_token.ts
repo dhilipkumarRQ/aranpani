@@ -9,6 +9,7 @@ export interface IJwtInterface extends JwtPayload {
     role: string
 }
 
+
 export const generateToken =  (userModel: any, userType:Roles) => {
     var role = null
     if(userType == Roles.ADMIN) {

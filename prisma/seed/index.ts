@@ -40,5 +40,38 @@ async function main() {
             is_active: true,
         }
     })
+
+
+    await prisma.paymentStatus.deleteMany()
+    await prisma.paymentStatus.create({
+        data:{
+            id:1,
+            status: "pending",
+        }
+    })
+    await prisma.paymentStatus.create({
+        data:{
+            id:2,
+            status: "paid",
+        }
+    })
+    await prisma.paymentStatus.create({
+        data:{
+            id:3,
+            status: "paid by rep",
+        }
+    })
+    await prisma.paymentStatus.create({
+        data:{
+            id:4,
+            status: "pending with rep",
+        }
+    })
+    await prisma.paymentStatus.create({
+        data:{
+            id:5,
+            status: "not paid",
+        }
+    })
 }
 main()
