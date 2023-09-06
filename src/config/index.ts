@@ -11,6 +11,11 @@ export const AREA_REP = 'area_rep'
 export const DEFAULT_PASSWORD = 'pass1234'
 export const MAX_REGISTER_NUMBER = 10000000
 
+export const AWS_ACCESS_KEY_ID = process.env.AWS_ACCESS_KEY_ID
+export const AWS_SECRET_ACCESS_KEY = process.env.AWS_SECRET_ACCESS_KEY
+export const S3_BUCKET = process.env.S3_BUCKET
+export const S3_REGION = process.env.S3_REGION
+
 export const PROJECT_STATUS = {
     PROPOSED : 'proposed',
     PLANNED :  'planned',
@@ -29,5 +34,20 @@ export const PAYMENT_MODE =  {
     STRIPE : 'stripe'
   }
 
+export const AttachmentType  = {
+  file : 'file',
+  image: 'image'
+}
+
+export const AttachmentFrom  = {
+  project : 'project',
+  activity: 'activity'
+}
+
+
+
 export const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY
 export const MY_DOMAIN = 'http://localhost:8000/payment'
+
+export const fileExtensions = [".jpeg", ".jpg", ".png"];
+export const imageExtensions = [".pdf", ".doc"];

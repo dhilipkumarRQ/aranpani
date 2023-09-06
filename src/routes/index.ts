@@ -6,6 +6,7 @@ import groupRoute from './groupRoutes'
 import projectRoute from './projectRoutes'
 import subscriptionRoute from './subscriptionRoutes'
 import paymentRoute from './paymentRoutes'
+import imageRoute from './imageRoutes'
 
 
 
@@ -18,6 +19,7 @@ router.use('/group', groupRoute)
 router.use('/project', projectRoute)
 router.use('/subscription', subscriptionRoute)
 router.use('/payment', paymentRoute)
+router.use('/upload-image', imageRoute)
 
 
 export default router

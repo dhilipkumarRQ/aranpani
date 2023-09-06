@@ -19,5 +19,7 @@ router.get('/:project_id/subscriber', [authenticate, isDonorAndAreaRep], control
 router.get('/:project_id/activity', [authenticate],controller.projectController.getAllActivity)
 router.post('/:project_id/activity', [authenticate],controller.projectController.addActivity)
 router.put('/:project_id/activity/:activity_id', [authenticate],controller.projectController.editActivity)
+router.get('/:id/image', [authenticate], controller.imageController.getProjectImage)
+router.get('/:id/attachment', [authenticate], controller.imageController.getProjectAttachment)
 
 export default router
