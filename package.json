@@ -12,7 +12,7 @@
   },
   "prisma": {
     "schema": "./src/prisma/schema.prisma",
-    "seed": "ts-node prisma/seed"
+    "seed": "node ./build/prisma/seed"
   },
   "keywords": [],
   "author": "",
