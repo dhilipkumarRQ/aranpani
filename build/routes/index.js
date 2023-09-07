@@ -1,0 +1,24 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const authRoutes_1 = __importDefault(require("./authRoutes"));
+const donorRoutes_1 = __importDefault(require("./donorRoutes"));
+const adminRoutes_1 = __importDefault(require("./adminRoutes"));
+const groupRoutes_1 = __importDefault(require("./groupRoutes"));
+const projectRoutes_1 = __importDefault(require("./projectRoutes"));
+const subscriptionRoutes_1 = __importDefault(require("./subscriptionRoutes"));
+const paymentRoutes_1 = __importDefault(require("./paymentRoutes"));
+const imageRoutes_1 = __importDefault(require("./imageRoutes"));
+const router = express_1.default.Router();
+router.use('/auth/user', authRoutes_1.default);
+router.use('/donor', donorRoutes_1.default);
+router.use('/admin', adminRoutes_1.default);
+router.use('/group', groupRoutes_1.default);
+router.use('/project', projectRoutes_1.default);
+router.use('/subscription', subscriptionRoutes_1.default);
+router.use('/payment', paymentRoutes_1.default);
+router.use('/upload-image', imageRoutes_1.default);
+exports.default = router;

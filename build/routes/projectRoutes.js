@@ -1,0 +1,26 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
+const authzMiddleware_1 = require("../middleware/authzMiddleware");
+const controllers_1 = __importDefault(require("../controllers"));
+const validators_1 = __importDefault(require("../validators"));
+const validatorMiddleware_1 = __importDefault(require("../middleware/validatorMiddleware"));
+const router = express_1.default.Router();
+router.post('/', [authMiddleware_1.default, (0, validatorMiddleware_1.default)(validators_1.default.projectValidator.createProject)], controllers_1.default.projectController.addProject);
+router.put('/:id', [authMiddleware_1.default], controllers_1.default.projectController.updateProject);
+router.get('/', controllers_1.default.projectController.getAllProject);
+router.get('/:id', [authMiddleware_1.default], controllers_1.default.projectController.getProject);
+router.put('/:id/change-status', [authMiddleware_1.default, authzMiddleware_1.isSuperAdminAndAdmin, (0, validatorMiddleware_1.default)(validators_1.default.projectValidator.status)], controllers_1.default.projectController.changeProjectState);
+router.delete('/:id/scrap', [authMiddleware_1.default, authzMiddleware_1.isSuperAdminAndAdmin], controllers_1.default.projectController.deleteProject);
+router.patch('/:id/restore', [authMiddleware_1.default, authzMiddleware_1.isSuperAdminAndAdmin], controllers_1.default.projectController.restoreProject);
+router.get('/:project_id/subscriber', [authMiddleware_1.default, authzMiddleware_1.isDonorAndAreaRep], controllers_1.default.projectController.getAllSubscriber);
+router.get('/:project_id/activity', [authMiddleware_1.default], controllers_1.default.projectController.getAllActivity);
+router.post('/:project_id/activity', [authMiddleware_1.default], controllers_1.default.projectController.addActivity);
+router.put('/:project_id/activity/:activity_id', [authMiddleware_1.default], controllers_1.default.projectController.editActivity);
+router.get('/:id/image', [authMiddleware_1.default], controllers_1.default.imageController.getProjectImage);
+router.get('/:id/attachment', [authMiddleware_1.default], controllers_1.default.imageController.getProjectAttachment);
+exports.default = router;

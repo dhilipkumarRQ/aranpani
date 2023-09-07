@@ -1,0 +1,20 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const groupController_1 = __importDefault(require("../controllers/groupController"));
+const authMiddleware_1 = __importDefault(require("../middleware/authMiddleware"));
+const validatorMiddleware_1 = __importDefault(require("../middleware/validatorMiddleware"));
+const validators_1 = __importDefault(require("../validators"));
+const router = express_1.default.Router();
+router.post('/add-group-member', [authMiddleware_1.default, (0, validatorMiddleware_1.default)(validators_1.default.groupValidator.addGroup)], groupController_1.default.addGroupMember);
+router.get('/donor/:id/group-member', [authMiddleware_1.default], groupController_1.default.getGroupMember);
+router.get('/group-member/:id', [authMiddleware_1.default], groupController_1.default.getParticularGroupMember);
+router.post('/group-member/:id/verify', [authMiddleware_1.default], groupController_1.default.verifyGroupMember);
+router.put('/group-member/:id', [authMiddleware_1.default, (0, validatorMiddleware_1.default)(validators_1.default.groupValidator.addGroup)], groupController_1.default.editParticularGroupMember);
+router.delete('/group-member/:id', [authMiddleware_1.default], groupController_1.default.deleteParticlarGroupMember);
+router.post('/group-member/:id/promote-to-donor', [authMiddleware_1.default, (0, validatorMiddleware_1.default)(validators_1.default.donorValidator.createDonor)], groupController_1.default.promoteToDonor);
+router.post('/group-member/:id/promote-to-head', [authMiddleware_1.default], groupController_1.default.promoteToHead);
+exports.default = router;

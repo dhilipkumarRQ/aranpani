@@ -1,4 +1,4 @@
-import prisma from "../../src/utils/prisma_init";
+import prisma from "../../utils/prisma_init";
 
 
 async function main() {
