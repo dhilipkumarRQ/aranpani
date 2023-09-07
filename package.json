@@ -11,6 +11,7 @@
     "prisma:schema-generate": "*.*.prisma >> shcema.prisma"
   },
   "prisma": {
+    "schema": "./src/prisma/schema.prisma",
     "seed": "ts-node prisma/seed"
   },
   "keywords": [],
