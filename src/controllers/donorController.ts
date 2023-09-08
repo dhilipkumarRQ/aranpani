@@ -184,7 +184,7 @@ const assignAreaRep:RequestHandler = async(req,res,next) => {
         if(donor) {
             const area_rep = await prisma.donor.findUnique({where:{id:Number(area_rep_id), is_area_rep:true, is_active:true}})
             if(area_rep) {
-                await prisma.donor.update({where:{id:Number(area_rep_id), is_otp_verified:true},data:{area_rep_id:Number(area_rep_id)}})
+                await prisma.donor.update({where:{id:Number(id), is_otp_verified:true},data:{area_rep_id:Number(area_rep_id)}})
                 res.send({"message": "area rep assinged successfully"})
             }else{
                 next(createHttpError(404,'area rep account not present'))
