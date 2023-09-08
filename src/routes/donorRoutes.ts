@@ -18,5 +18,7 @@ router.get('/:id/area-rep',[authenticate], donorController.getAreaRep)
 router.post('/complete-profile',[authenticate, isDonorAndAreaRep, validate(validators.donorValidator.updateProfile)], donorController.completeDonorProfile)
 router.patch('/pin-location',[authenticate, isDonorAndAreaRep, validate(validators.donorValidator.updatePinCode)], donorController.updateLocation)
 router.patch('/language',[authenticate, isDonorAndAreaRep, validate(validators.donorValidator.updateLanguage)], donorController.updateLanguage)
-
+router.patch('/attach-payment-plan', [authenticate, isDonorAndAreaRep], donorController.attachPlan)
+router.patch('/:id/arearep', [authenticate], donorController.assignAreaRep)
+router.patch('/:id/promote-to-rep', [authenticate], donorController.promoteToAreaRep)
 export default router

@@ -3,9 +3,6 @@ import prisma from "../utils/prisma_init";
 import createHttpError from "http-errors";
 import {generateHashPass} from '../utils/password_verify'
 
-
-
-
 const createDonor: RequestHandler = async(req, res, next) => {
     try{
         const {name,phone_number,email, father_name, country, district, state, pincode,address,area_rep_id,subscription_plan_id,is_active} = req.body
@@ -76,8 +73,7 @@ const getSingleDonor = async(req:Request, res:Response, next:NextFunction) => {
     }
 }
 const updateSingleDonor = async(req:Request, res:Response, next:NextFunction) => {
-    const {id} = req.params
-    res.send({"message":"account updated..."}).status(404)
+    res.send({"message":"need to be implemented"}).status(200)
 }
 const decativateDonorAccount = async(req:Request, res:Response, next:NextFunction) => {}
 const getAreaRep = async(req:Request, res:Response, next:NextFunction) => {
@@ -159,4 +155,46 @@ const updateLanguage = async(req:Request, res:Response, next:NextFunction) => {
     }
 }
 
-export default {createDonor, getDonor,  getSingleDonor, updateSingleDonor, decativateDonorAccount, getAreaRep, completeDonorProfile, updateLocation, updateLanguage}
+
+const promoteToAreaRep:RequestHandler = async(req,res,next) => {
+    try {
+        const {id} = req.params
+        await prisma.donor.update({where:{id:Number(id), is_active:true, is_otp_verified:true},data:{is_area_rep:true}})
+        res.send({"message":"promoted to area rep"})
+    } catch (error) {
+        next(error)
+    }
+}
+
+const attachPlan:RequestHandler = async(req,res,next) => {
+    try {
+        const {plan_id} = req.body
+        await prisma.donor.update({where:{id:Number(req.user_id)},data:{subscription_plan_id:Number(plan_id)}})
+        res.send({"message": "payment plan attached"})
+    } catch (error) {
+        next(error)
+    }
+}
+
+const assignAreaRep:RequestHandler = async(req,res,next) => {
+    try{
+        const {id} = req.params
+        const {area_rep_id}  = req.body
+        const donor = await prisma.donor.findUnique({where:{id:Number(id),is_otp_verified:true,is_active:true}})
+        if(donor) {
+            const area_rep = await prisma.donor.findUnique({where:{id:Number(area_rep_id), is_area_rep:true, is_active:true}})
+            if(area_rep) {
+                await prisma.donor.update({where:{id:Number(area_rep_id), is_otp_verified:true},data:{area_rep_id:Number(area_rep_id)}})
+                res.send({"message": "area rep assinged successfully"})
+            }else{
+                next(createHttpError(404,'area rep account not present'))
+            }
+        }else{
+            next(createHttpError(404,'donor account not present'))
+        }
+    }catch(error){
+        next(error)
+    }
+}
+
+export default {createDonor, getDonor,  getSingleDonor, updateSingleDonor, decativateDonorAccount, getAreaRep, completeDonorProfile, updateLocation, updateLanguage,attachPlan,assignAreaRep,promoteToAreaRep}

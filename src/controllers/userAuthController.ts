@@ -10,6 +10,9 @@ import { Prisma } from '@prisma/client';
 const login = async (req: Request, res: Response, next:NextFunction) => {
     const {phone_number, password, email, role} = req.body
     if(role == Roles.ADMIN || role == Roles.SUPER_ADMIN) {
+        if(!email) {
+            return next(createHttpError(422, 'cannot proceess the request'))
+        }
         const user = await prisma.user.findUnique({
             where: {
                 email: email,
@@ -31,6 +34,9 @@ const login = async (req: Request, res: Response, next:NextFunction) => {
             next(createHttpError(422, 'password is incorrect'))
         }
     }else if(role == Roles.DONOR || role == Roles.AREA_REP) {
+        if(!phone_number) {
+            return next(createHttpError(422, 'cannot proceess the request'))
+        }
         const user = await prisma.donor.findUnique({
                     where: {
                         phone_number: phone_number,
