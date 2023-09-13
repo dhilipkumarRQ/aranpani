@@ -21,6 +21,9 @@ const config_2 = require("../config");
 const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const { phone_number, password, email, role } = req.body;
     if (role == config_2.Roles.ADMIN || role == config_2.Roles.SUPER_ADMIN) {
+        if (!email) {
+            return next((0, http_errors_1.default)(422, 'cannot proceess the request'));
+        }
         const user = yield prisma_init_1.default.user.findUnique({
             where: {
                 email: email,
@@ -45,6 +48,9 @@ const login = (req, res, next) => __awaiter(void 0, void 0, void 0, function* ()
         }
     }
     else if (role == config_2.Roles.DONOR || role == config_2.Roles.AREA_REP) {
+        if (!phone_number) {
+            return next((0, http_errors_1.default)(422, 'cannot proceess the request'));
+        }
         const user = yield prisma_init_1.default.donor.findUnique({
             where: {
                 phone_number: phone_number,

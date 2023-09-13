@@ -13,4 +13,5 @@ router.get('/donor/:id', [authMiddleware_1.default], controllers_1.default.payme
 router.get('/donor', [authMiddleware_1.default], controllers_1.default.paymentController.getAllPayment);
 router.post('/stipe-payment-link', [authMiddleware_1.default, authzMiddleware_1.isDonorAndAreaRep], controllers_1.default.paymentController.getPaymentLink);
 router.post('/verify', [authMiddleware_1.default, authzMiddleware_1.isDonorAndAreaRep], controllers_1.default.paymentController.verifyPaymentAndUpdateStatus);
+router.post('/webhook', controllers_1.default.paymentController.webhookHandler);
 exports.default = router;

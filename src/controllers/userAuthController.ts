@@ -5,7 +5,7 @@ import createHttpError from "http-errors";
 import { OTP } from "../config";
 import {generateToken}  from "../utils/jwt_token";
 import { Roles } from "../config";
-import { Prisma } from '@prisma/client';
+
 
 const login = async (req: Request, res: Response, next:NextFunction) => {
     const {phone_number, password, email, role} = req.body

@@ -8,25 +8,21 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-const client_1 = require("@prisma/client");
-const config_1 = require("../config");
-const prisma = new client_1.PrismaClient({
-    errorFormat: 'pretty'
-});
-function main() {
-    return __awaiter(this, void 0, void 0, function* () {
+const supertest_1 = __importDefault(require("supertest"));
+const index_1 = __importDefault(require("../index"));
+describe("POST /api/v1/auth/user", () => {
+    test("login successful", () => __awaiter(void 0, void 0, void 0, function* () {
+        const response = yield (0, supertest_1.default)(index_1.default).get('/');
+        expect(response.status).toEqual(200);
+    }));
+    test('sample test', () => {
+        expect(1 + 1).toBe(2);
     });
-}
-main()
-    .then(() => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(`node environment..........${config_1.NODE_ENV}`);
-    console.log(`postgres db connected........${config_1.DATABASE_URL}`);
-    yield prisma.$disconnect();
-}))
-    .catch((e) => __awaiter(void 0, void 0, void 0, function* () {
-    console.error(e);
-    yield prisma.$disconnect();
-    process.exit(1);
-}));
-exports.default = prisma;
+    test('sample test2', () => {
+        expect(1 + 3).toBe(4);
+    });
+});

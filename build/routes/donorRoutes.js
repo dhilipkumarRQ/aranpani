@@ -19,4 +19,7 @@ router.get('/:id/area-rep', [authMiddleware_1.default], donorController_1.defaul
 router.post('/complete-profile', [authMiddleware_1.default, authzMiddleware_1.isDonorAndAreaRep, (0, validatorMiddleware_1.default)(validators_1.default.donorValidator.updateProfile)], donorController_1.default.completeDonorProfile);
 router.patch('/pin-location', [authMiddleware_1.default, authzMiddleware_1.isDonorAndAreaRep, (0, validatorMiddleware_1.default)(validators_1.default.donorValidator.updatePinCode)], donorController_1.default.updateLocation);
 router.patch('/language', [authMiddleware_1.default, authzMiddleware_1.isDonorAndAreaRep, (0, validatorMiddleware_1.default)(validators_1.default.donorValidator.updateLanguage)], donorController_1.default.updateLanguage);
+router.patch('/attach-payment-plan', [authMiddleware_1.default, authzMiddleware_1.isDonorAndAreaRep], donorController_1.default.attachPlan);
+router.patch('/:id/arearep', [authMiddleware_1.default], donorController_1.default.assignAreaRep);
+router.patch('/:id/promote-to-rep', [authMiddleware_1.default], donorController_1.default.promoteToAreaRep);
 exports.default = router;

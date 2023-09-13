@@ -1,11 +1,12 @@
 import express,{RequestHandler} from 'express'
-import { STRIPE_SECRET_KEY,MY_DOMAIN,SECRET_KEY ,PAYMENT_MODE} from '../config';
+import { STRIPE_SECRET_KEY,MY_DOMAIN,SECRET_KEY ,PAYMENT_MODE, STRIPE_WEBHOOK_SECRET} from '../config';
 const stripe = require('stripe')(STRIPE_SECRET_KEY);
 import paymentUtils from "../utils/payments/paymentUtils";
 import prisma from '../utils/prisma_init';
 import jwt,{JwtPayload} from "jsonwebtoken";
 import {IJwtInterface} from '../utils/jwt_token'
 import createHttpError from 'http-errors';
+import crypto from 'crypto'
 
 
 interface IJwtPaymentInterface extends IJwtInterface {
@@ -93,4 +94,52 @@ const verifyPaymentAndUpdateStatus:RequestHandler = async(req,res,next) => {
 }
 
 
-export default {getPaymentMode, getAllPayment, getSinglePayment, getPaymentLink,verifyPaymentAndUpdateStatus}
+function verifyWebhookSignature(payload:any, signatureHeader:any) {
+    const signature = signatureHeader.split('t=')[1]; // Extract the timestamped signature
+    const timestamp = signatureHeader.split(',')[0]; // Extract the timestamp
+    const timestampBuffer = Buffer.from(timestamp, 'utf-8');
+    const payloadBuffer = Buffer.from(payload, 'utf-8');
+    const secretBuffer = Buffer.from(String(STRIPE_WEBHOOK_SECRET), 'utf-8');
+  
+    // Concatenate the timestamp and payload
+    const concatenatedBuffer = Buffer.concat([timestampBuffer, payloadBuffer]);
+  
+    // Compute the expected signature
+    const expectedSignature = crypto
+      .createHmac('sha256', secretBuffer)
+      .update(concatenatedBuffer)
+      .digest('hex');
+  
+    return expectedSignature === signature;
+}
+
+const webhookHandler:RequestHandler = async (req, res, next) => {
+    
+    // const sig = req.headers['stripe-signature'];
+    const event = req.body;
+    // console.log(event)
+    // res.send("asdfsadfsdfsdfsd")
+    try {
+        // const event = stripe.webhooks.constructEvent(req.body, sig, STRIPE_WEBHOOK_SECRET);
+        switch (event.type) {
+            case 'checkout.session.completed':
+                const chekoutCompleted = event.data.object;
+                console.log('success....')
+                console.log(`event type ${event.type}`);
+                break;
+            case 'checkout.session.expired':
+                const chekoutExpired = event.data.object;
+                console.log('expired....')
+                console.log(`event type ${event.type}`);
+                break;
+            default:
+                console.log(`Unhandled event type ${event.type}`);
+        }
+        res.json({"message": "webhook recieved!"});
+    } catch (error: any) {
+        console.log(error.message)
+        next(error)
+    }
+}
+
+export default {getPaymentMode, getAllPayment, getSinglePayment, getPaymentLink,verifyPaymentAndUpdateStatus, webhookHandler}

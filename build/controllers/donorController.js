@@ -90,8 +90,7 @@ const getSingleDonor = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 const updateSingleDonor = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.params;
-    res.send({ "message": "account updated..." }).status(404);
+    res.send({ "message": "need to be implemented" }).status(200);
 });
 const decativateDonorAccount = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () { });
 const getAreaRep = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
@@ -176,4 +175,47 @@ const updateLanguage = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
         next(error);
     }
 });
-exports.default = { createDonor, getDonor, getSingleDonor, updateSingleDonor, decativateDonorAccount, getAreaRep, completeDonorProfile, updateLocation, updateLanguage };
+const promoteToAreaRep = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        yield prisma_init_1.default.donor.update({ where: { id: Number(id), is_active: true, is_otp_verified: true }, data: { is_area_rep: true } });
+        res.send({ "message": "promoted to area rep" });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+const attachPlan = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { plan_id } = req.body;
+        yield prisma_init_1.default.donor.update({ where: { id: Number(req.user_id) }, data: { subscription_plan_id: Number(plan_id) } });
+        res.send({ "message": "payment plan attached" });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+const assignAreaRep = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { id } = req.params;
+        const { area_rep_id } = req.body;
+        const donor = yield prisma_init_1.default.donor.findUnique({ where: { id: Number(id), is_otp_verified: true, is_active: true } });
+        if (donor) {
+            const area_rep = yield prisma_init_1.default.donor.findUnique({ where: { id: Number(area_rep_id), is_area_rep: true, is_active: true } });
+            if (area_rep) {
+                yield prisma_init_1.default.donor.update({ where: { id: Number(id), is_otp_verified: true }, data: { area_rep_id: Number(area_rep_id) } });
+                res.send({ "message": "area rep assinged successfully" });
+            }
+            else {
+                next((0, http_errors_1.default)(404, 'area rep account not present'));
+            }
+        }
+        else {
+            next((0, http_errors_1.default)(404, 'donor account not present'));
+        }
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.default = { createDonor, getDonor, getSingleDonor, updateSingleDonor, decativateDonorAccount, getAreaRep, completeDonorProfile, updateLocation, updateLanguage, attachPlan, assignAreaRep, promoteToAreaRep };
